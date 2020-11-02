@@ -72,3 +72,33 @@ exports.updateContact = async (req, res) => {
         res.status(500).json({ status: 'error', err: 'server error' })
     }
 }
+
+exports.deleteContact = async (req, res) => {
+    try {
+        //const contact = await Contact.findByIdAndUpdate(req.params.id, req.body)
+        const contact = await Contact.findById(req.params.id)
+
+        if (!contact) {
+            return res.status(404).json({
+                status: 'fail',
+                msg: 'Contact not found'
+            })
+        }
+
+        if (contact.user.toString() !== req.user._id.toString()) {
+            return res.status(403).json({
+                status: 'fail',
+                msg: 'Not Authorized'
+            })
+        }
+
+        await Contact.findByIdAndDelete(req.params.id)
+
+        res.status(204).json({
+            status: 'success'
+        })
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).json({ status: 'error', err: 'server error' })
+    }
+}
