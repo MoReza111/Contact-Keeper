@@ -5,7 +5,7 @@ const userController = require('./../controllers/userController')
 
 const router = express.Router()
 
-router.route('/').post([
+router.route('/signup').post([
     body('name', 'Please add Name').not().isEmpty(),
     body('email', 'Please include a valid email').isEmail(),
     body('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
