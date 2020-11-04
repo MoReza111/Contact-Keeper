@@ -8,10 +8,10 @@ const Home = () => {
         <div className="grid-2">
             <div>
                 {/* Contact Form*/}
-                <ContactFilter />
                 <ContactForm />
             </div>
             <div>
+                <ContactFilter />
                 <Contact />
             </div>
         </div>
