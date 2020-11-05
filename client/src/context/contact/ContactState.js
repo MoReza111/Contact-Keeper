@@ -28,7 +28,11 @@ const ContactState = props => {
     // Get Contacts 
     const getContacts = async () => {
         try {
-            const res = await axios.get('/api/contacts')
+            const res = await axios.get('/api/contacts', {
+                headers: {
+                    'authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
 
             dispatch({ type: GET_CONTACTS, payload: res.data.contacts })
         } catch (err) {
@@ -41,7 +45,8 @@ const ContactState = props => {
     const addContact = async contact => {
         const config = {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${localStorage.getItem('token')}`
             }
         }
 
@@ -55,8 +60,19 @@ const ContactState = props => {
 
     }
     // Delete Contact
-    const deleteContact = id => {
-        dispatch({ type: DELETE_CONTACT, payload: id })
+    const deleteContact = async id => {
+        try {
+            await axios.delete(`/api/contacts/${id}`, {
+                headers: {
+                    'authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+
+            dispatch({ type: DELETE_CONTACT, payload: id })
+        } catch (err) {
+            dispatch({ type: CONTACT_ERROR, payload: err.response.msg })
+        }
+
     }
     // Set Current Contact
     const setCurrent = contact => {
@@ -79,7 +95,7 @@ const ContactState = props => {
         dispatch({ type: CLEAR_FILTER })
     }
 
-    const clearContact = () => {
+    const clearContacts = () => {
         dispatch({ type: CLEAR_CONTACT })
     }
     return <ContactContext.Provider
@@ -96,7 +112,7 @@ const ContactState = props => {
             updateContact,
             filterContacts,
             clearFilter,
-            clearContact
+            clearContacts
         }}
     >
         {props.children}
