@@ -1,10 +1,23 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import AlertContext from './../../context/alert/alertContext'
+import AuthContext from './../../context/auth/authContext'
 
-const SignUp = () => {
+const SignUp = (props) => {
     const alertContext = useContext(AlertContext)
+    const authContext = useContext(AuthContext)
 
     const { setAlert } = alertContext
+    const { signup, error, clearError, isAuthenticated } = authContext
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            props.history.push('/')
+        }
+        if (error === 'User already exists') {
+            setAlert(error, 'danger')
+            clearError()
+        }
+    }, [error, isAuthenticated, props.history])
 
     const [user, setUser] = useState({
         name: '',
@@ -25,7 +38,7 @@ const SignUp = () => {
             setAlert('Passwords do not match', 'danger')
         }
         else {
-            console.log('Register Submit')
+            signup({ name, email, password, confirmPassword })
         }
     }
 
