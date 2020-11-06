@@ -36,6 +36,7 @@ const ContactForm = () => {
             addContact(contact)
         } else {
             updateContact(contact)
+            clearCurrent()
         }
         setContact({
             name: '',
@@ -71,9 +72,9 @@ const ContactForm = () => {
                 onChange={onChange}
             />
             <h5>Contact Type</h5>
-            <input type='radio' name='type' value='personal' check={type === 'personal'} onChange={onChange} checked />
+            <input type='radio' name='type' value='personal' checked={type === 'personal'} onChange={onChange} />
             Personal{' '}
-            <input type='radio' name='type' value='professional' check={type === 'professional'} onChange={onChange} />
+            <input type='radio' name='type' value='professional' checked={type === 'professional'} onChange={onChange} />
             Professional{' '}
             <div>
                 <input type="submit" value={current ? 'Update Contact' : 'Add Contact'} className="btn btn-primary" />
